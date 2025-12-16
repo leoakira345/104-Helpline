@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>104 Medical Helpline - Call Center CRM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="8" fill="#0066cc"/>
+                        <path d="M20 10v20M10 20h20" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>104 Medical Helpline</h1>
+                    <p>Emergency Call Center</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="status-indicator online"></div>
+                <span class="agent-name">Agent: <strong id="agentName">John Doe</strong></span>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <button class="nav-item active" onclick="switchTab('dashboard')">
+                        <span class="icon">📊</span> Dashboard
+                    </button>
+                    <button class="nav-item" onclick="switchTab('calls')">
+                        <span class="icon">📞</span> Active Calls
+                    </button>
+                    <button class="nav-item" onclick="switchTab('patients')">
+                        <span class="icon">👥</span> Patients
+                    </button>
+                    <button class="nav-item" onclick="switchTab('history')">
+                        <span class="icon">📋</span> Call History
+                    </button>
+                    <button class="nav-item" onclick="switchTab('reports')">
+                        <span class="icon">📈</span> Reports
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <h2 class="section-title">Dashboard Overview</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">📞</div>
+                            <div class="stat-info">
+                                <h3>Total Calls Today</h3>
+                                <p class="stat-number" id="totalCalls">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">✓</div>
+                            <div class="stat-info">
+                                <h3>Resolved Cases</h3>
+                                <p class="stat-number" id="resolvedCalls">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange">⏱</div>
+                            <div class="stat-info">
+                                <h3>Avg. Response Time</h3>
+                                <p class="stat-number" id="avgTime">0s</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red">🚨</div>
+                            <div class="stat-info">
+                                <h3>Emergency Calls</h3>
+                                <p class="stat-number" id="emergencyCalls">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="makeCall()">📞 Make Call</button>
+                            <button class="btn btn-secondary" onclick="addPatient()">➕ Add Patient</button>
+                            <button class="btn btn-secondary" onclick="viewQueue()">📋 View Queue</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Calls Tab -->
+                <div id="calls" class="tab-content">
+                    <h2 class="section-title">Active Calls</h2>
+                    <div class="call-controls">
+                        <div class="phone-display">
+                            <input type="text" id="phoneNumber" class="phone-input" placeholder="Enter phone number">
+                            <div class="dialpad">
+                                <button class="dial-btn" onclick="dialNumber('1')">1</button>
+                                <button class="dial-btn" onclick="dialNumber('2')">2</button>
+                                <button class="dial-btn" onclick="dialNumber('3')">3</button>
+                                <button class="dial-btn" onclick="dialNumber('4')">4</button>
+                                <button class="dial-btn" onclick="dialNumber('5')">5</button>
+                                <button class="dial-btn" onclick="dialNumber('6')">6</button>
+                                <button class="dial-btn" onclick="dialNumber('7')">7</button>
+                                <button class="dial-btn" onclick="dialNumber('8')">8</button>
+                                <button class="dial-btn" onclick="dialNumber('9')">9</button>
+                                <button class="dial-btn" onclick="dialNumber('*')">*</button>
+                                <button class="dial-btn" onclick="dialNumber('0')">0</button>
+                                <button class="dial-btn" onclick="dialNumber('#')">#</button>
+                            </div>
+                            <div class="call-actions">
+                                <button class="btn-call" onclick="initiateCall()">📞 Call</button>
+                                <button class="btn-end" onclick="endCall()">📵 End</button>
+                                <button class="btn-clear" onclick="clearNumber()">⌫ Clear</button>
+                            </div>
+                        </div>
+                        <div class="call-info">
+                            <div id="callStatus" class="call-status">Ready</div>
+                            <div id="callTimer" class="call-timer">00:00:00</div>
+                            <div class="call-buttons">
+                                <button class="icon-btn" onclick="toggleMute()" title="Mute">🔇</button>
+                                <button class="icon-btn" onclick="toggleHold()" title="Hold">⏸</button>
+                                <button class="icon-btn" onclick="transferCall()" title="Transfer">➡️</button>
+                                <button class="icon-btn" onclick="recordCall()" title="Record">⏺</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="active-calls-list" id="activeCallsList">
+                        <p class="no-calls">No active calls</p>
+                    </div>
+                </div>
+
+                <!-- Patients Tab -->
+                <div id="patients" class="tab-content">
+                    <h2 class="section-title">Patient Records</h2>
+                    <div class="search-bar">
+                        <input type="text" id="patientSearch" placeholder="Search patients..." onkeyup="searchPatients()">
+                        <button class="btn btn-primary" onclick="addPatient()">➕ Add New Patient</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Last Contact</th>
+                                    <th>Priority</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patientsTable">
+                                <tr>
+                                    <td colspan="6" class="no-data">No patients found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Call History Tab -->
+                <div id="history" class="tab-content">
+                    <h2 class="section-title">Call History</h2>
+                    <div class="filters">
+                        <input type="date" id="dateFrom" class="filter-input">
+                        <input type="date" id="dateTo" class="filter-input">
+                        <select id="callType" class="filter-input">
+                            <option value="">All Types</option>
+                            <option value="emergency">Emergency</option>
+                            <option value="consultation">Consultation</option>
+                            <option value="followup">Follow-up</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="filterHistory()">Apply Filter</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Call ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Phone</th>
+                                    <th>Type</th>
+                                    <th>Duration</th>
+                                    <th>Date & Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTable">
+                                <tr>
+                                    <td colspan="7" class="no-data">No call history</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Reports Tab -->
+                <div id="reports" class="tab-content">
+                    <h2 class="section-title">Reports & Analytics</h2>
+                    <div class="report-options">
+                        <button class="btn btn-secondary" onclick="generateReport('daily')">Daily Report</button>
+                        <button class="btn btn-secondary" onclick="generateReport('weekly')">Weekly Report</button>
+                        <button class="btn btn-secondary" onclick="generateReport('monthly')">Monthly Report</button>
+                        <button class="btn btn-primary" onclick="exportReport()">📥 Export CSV</button>
+                    </div>
+                    <div id="reportContent" class="report-content">
+                        <p>Select a report type to view analytics</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal for Add Patient -->
+    <div id="patientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add New Patient</h2>
+            <form id="patientForm" onsubmit="savePatient(event)">
+                <div class="form-group">
+                    <label>Patient Name *</label>
+                    <input type="text" id="patientNameInput" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="patientPhoneInput" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="patientEmailInput">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea id="patientAddressInput" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Medical History</label>
+                    <textarea id="patientHistoryInput" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Priority Level</label>
+                    <select id="patientPriorityInput">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Patient</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
